@@ -1,4 +1,4 @@
-// Need THREE.JS
+const THREE = require("three-full/builds/Three.cjs.js");
 
 /**
  * @author maximequiblier
@@ -281,3 +281,5 @@ function CapsuleBufferGeometry( radiusTop, radiusBottom, height, radialSegments,
 
 CapsuleBufferGeometry.prototype = Object.create( BufferGeometry.prototype );
 CapsuleBufferGeometry.prototype.constructor = CapsuleBufferGeometry;
+
+module.exports = CapsuleBufferGeometry;

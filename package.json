@@ -1,0 +1,32 @@
+{
+  "name": "three-js-capsule-geometry",
+  "version": "1.0.0",
+  "description": "A CapsuleBufferGeometry as a new geometry primitive for THREE.JS.",
+  "main": "src/capsule.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.js",
+    "lint": "eslint --env node --env browser --env es6 **.js"
+  },
+  "dependencies": {
+    "three-full": "^11.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.11.0",
+    "fs-extra": "^7.0.1",
+    "jsdoc-api": "^4.0.3",
+    "rollup": "^0.67.1",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-prettier": "^0.6.0"
+  },
+  "files": [
+    "src/*",
+    "dist/*"
+  ],
+  "browser": "./dist/browser/three-js-capsule-geometry.js",
+  "author": "Maxime Quiblier <maximequiblier@gmail.com>",
+  "license": "MIT",
+  "hash": "cbb66061ffd05bc5f6673756895b3f6f03e7202a"
+}
