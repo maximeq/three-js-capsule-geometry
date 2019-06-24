@@ -2,14 +2,14 @@
   "name": "three-js-capsule-geometry",
   "version": "1.0.0",
   "description": "A CapsuleBufferGeometry as a new geometry primitive for THREE.JS.",
-  "main": "src/capsule.js",
+  "main": "src/exports.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build.js",
     "lint": "eslint --env node --env browser --env es6 **.js"
   },
   "dependencies": {
-    "three-full": "^11.3.2"
+    "three-full": "16.0.1"
   },
   "devDependencies": {
     "eslint": "^4.11.0",

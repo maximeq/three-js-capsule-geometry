@@ -279,7 +279,7 @@
 
 	}
 
-	CapsuleBufferGeometry.prototype = Object.create( BufferGeometry.prototype );
+	CapsuleBufferGeometry.prototype = Object.create( Three_cjs.BufferGeometry.prototype );
 	CapsuleBufferGeometry.prototype.constructor = CapsuleBufferGeometry;
 
 	var CapsuleBufferGeometry_1 = CapsuleBufferGeometry;

@@ -279,7 +279,7 @@ function CapsuleBufferGeometry( radiusTop, radiusBottom, height, radialSegments,
 
 }
 
-CapsuleBufferGeometry.prototype = Object.create( BufferGeometry.prototype );
+CapsuleBufferGeometry.prototype = Object.create( THREE.BufferGeometry.prototype );
 CapsuleBufferGeometry.prototype.constructor = CapsuleBufferGeometry;
 
 module.exports = CapsuleBufferGeometry;
