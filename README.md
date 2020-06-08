@@ -51,7 +51,13 @@ Distribution files can be found in ./dist/browser, to be included in your HTML :
 
 #### Node ####
 
-May come one day on npm.
+In the repository folder:
+
+```
+npm start
+```
+
+This should open a browser window with a test application on a local server.
 
 ### Repository Commands ###
 
