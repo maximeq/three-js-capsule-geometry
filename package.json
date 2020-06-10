@@ -6,12 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build.js",
-    "lint": "eslint --env node --env browser --env es6 **.js"
+    "lint": "eslint --env node --env browser --env es6 **.js",
+    "start": "http-server -c-1 -o /examples/browser/basic.html"
   },
   "dependencies": {
     "three-full": "16.0.1"
   },
   "devDependencies": {
+    "http-server": "^0.12.3",
     "eslint": "^4.11.0",
     "fs-extra": "^7.0.1",
     "jsdoc-api": "^4.0.3",
