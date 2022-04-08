@@ -1,4 +1,4 @@
-var THREECapsuleBufferGeometry = (function (require$$0) {
+var THREECapsuleBufferGeometry = (function (exports, require$$0) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -369,13 +369,26 @@ var THREECapsuleBufferGeometry = (function (require$$0) {
 
     var CapsuleBufferGeometry_1 = CapsuleBufferGeometry;
 
-    var THREECapsuleBufferGeometry = CapsuleBufferGeometry_1;
+    function checkLib(libName, lib) {
 
-    THREE.CapsuleBufferGeometry = THREECapsuleBufferGeometry;
+        if (THREE[libName] === undefined) {
+            THREE[libName] = lib;
+            return;
+        }
 
-    var exports$1 = THREECapsuleBufferGeometry;
+        if (THREE[libName] !== lib) {
+            let message = `CapsuleBufferGeometry: ${libName} is duplicated. Your bundle includes ${libName} twice. Please repair your bundle.`;
+            throw message;
+        }
+    }
 
-    return exports$1;
+    checkLib("CapsuleBufferGeometry", CapsuleBufferGeometry_1);
 
-})(THREE);
+    exports.CapsuleBufferGeometry = CapsuleBufferGeometry_1;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+    return exports;
+
+})({}, THREE);
 //# sourceMappingURL=three-js-capsule-geometry.js.map

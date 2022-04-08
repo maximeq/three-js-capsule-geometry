@@ -2,7 +2,7 @@
   "name": "three-js-capsule-geometry",
   "version": "1.0.0",
   "description": "A CapsuleBufferGeometry as a new geometry primitive for THREE.JS.",
-  "main": "src/exports.js",
+  "main": "src/check-wrapper.js",
   "scripts": {
     "build": "rollup -c",
     "start": "http-server -c-1 -o /examples/browser/basic.html",

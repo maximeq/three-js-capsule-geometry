@@ -364,10 +364,19 @@ CapsuleBufferGeometry.fromPoints = function(pointA, pointB, radiusA, radiusB, ra
 
 var CapsuleBufferGeometry_1 = CapsuleBufferGeometry;
 
-var THREECapsuleBufferGeometry = CapsuleBufferGeometry_1;
+function checkLib(libName, lib) {
 
-THREE.CapsuleBufferGeometry = THREECapsuleBufferGeometry;
+    if (THREE[libName] === undefined) {
+        THREE[libName] = lib;
+        return;
+    }
 
-var exports = THREECapsuleBufferGeometry;
+    if (THREE[libName] !== lib) {
+        let message = `CapsuleBufferGeometry: ${libName} is duplicated. Your bundle includes ${libName} twice. Please repair your bundle.`;
+        throw message;
+    }
+}
 
-export { exports as default };
+checkLib("CapsuleBufferGeometry", CapsuleBufferGeometry_1);
+
+export { CapsuleBufferGeometry_1 as CapsuleBufferGeometry };

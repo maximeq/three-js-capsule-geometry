@@ -18,7 +18,7 @@ const globals = {
 
 export default {
     // entrypoint
-    input: './src/exports.js',
+    input: './src/check-wrapper.js',
 
     // common options
     plugins: [

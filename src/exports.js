@@ -1,5 +1,5 @@
-var THREECapsuleBufferGeometry = require("./CapsuleBufferGeometry");
+import  CapsuleBufferGeometry  from "./CapsuleBufferGeometry";
 
-THREE.CapsuleBufferGeometry = THREECapsuleBufferGeometry;
-
-module.exports = THREECapsuleBufferGeometry;
+export {
+    CapsuleBufferGeometry,
+}
