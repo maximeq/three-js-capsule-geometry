@@ -1,6 +1,6 @@
-import commonjs from 'rollup-plugin-commonjs';
-import resolve from 'rollup-plugin-node-resolve';
-import { terser } from 'rollup-plugin-terser';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { terser } from "rollup-plugin-terser";
 
 const MODULE_NAME = 'THREECapsuleBufferGeometry';
 const MODULE_FILENAME = 'three-js-capsule-geometry';
@@ -17,19 +17,24 @@ const globals = {
 }
 
 export default {
+    // entrypoint
     input: './src/exports.js',
+
+    // common options
     plugins: [
         commonjs(), // handles requires in CJS dependancies
-        resolve(), // resolves node_module dependancies
+        nodeResolve(), // resolves node_module dependancies
     ],
     external: externals,
+
+    // specific options
     output: [
-        // output options
 
         {   // for bundlers
             format: 'esm',
             file: `${DIST}/${MODULE_FILENAME}.mjs`,
         },
+
         {   // for browser (debug)
             format: 'iife',
             name: MODULE_NAME,
@@ -37,6 +42,7 @@ export default {
             file: `${DIST}/${MODULE_FILENAME}.js`,
             sourcemap: true, // for easier debugging in dev tools
         },
+
         {   // for browser (minified)
             format: 'iife',
             name: MODULE_NAME,

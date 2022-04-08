@@ -1,16 +1,18 @@
-var THREECapsuleBufferGeometry = (function (three) {
+var THREECapsuleBufferGeometry = (function (require$$0) {
     'use strict';
 
     function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-    var three__default = /*#__PURE__*/_interopDefaultLegacy(three);
+    var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
+
+    const THREE$1 = require$$0__default["default"];
 
     /**
      * @author maximequiblier
      */
     function CapsuleBufferGeometry( radiusTop, radiusBottom, height, radialSegments, heightSegments, capsTopSegments, capsBottomSegments, thetaStart, thetaLength ) {
 
-        three__default["default"].BufferGeometry.call( this );
+        THREE$1.BufferGeometry.call( this );
 
         this.type = 'CapsuleBufferGeometry';
 
@@ -43,10 +45,10 @@ var THREECapsuleBufferGeometry = (function (three) {
         var indexCount = calculateIndexCount();
 
         // buffers
-        var indices = new three__default["default"].BufferAttribute( new ( indexCount > 65535 ? Uint32Array : Uint16Array )( indexCount ), 1 );
-        var vertices = new three__default["default"].BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
-        var normals = new three__default["default"].BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
-        var uvs = new three__default["default"].BufferAttribute( new Float32Array( vertexCount * 2 ), 2 );
+        var indices = new THREE$1.BufferAttribute( new ( indexCount > 65535 ? Uint32Array : Uint16Array )( indexCount ), 1 );
+        var vertices = new THREE$1.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
+        var normals = new THREE$1.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
+        var uvs = new THREE$1.BufferAttribute( new Float32Array( vertexCount * 2 ), 2 );
 
         // helper variables
 
@@ -81,17 +83,17 @@ var THREECapsuleBufferGeometry = (function (three) {
         function generateTorso() {
 
             var x, y;
-            var normal = new three__default["default"].Vector3();
-            var vertex = new three__default["default"].Vector3();
+            var normal = new THREE$1.Vector3();
+            var vertex = new THREE$1.Vector3();
 
             var cosAlpha = Math.cos(alpha);
             var sinAlpha = Math.sin(alpha);
 
             var cone_length =
-                new three__default["default"].Vector2(
+                new THREE$1.Vector2(
                     radiusTop*sinAlpha,
                     halfHeight+radiusTop*cosAlpha
-                    ).sub(new three__default["default"].Vector2(
+                    ).sub(new THREE$1.Vector2(
                         radiusBottom*sinAlpha,
                         -halfHeight+radiusBottom*cosAlpha
                     )
@@ -278,7 +280,7 @@ var THREECapsuleBufferGeometry = (function (three) {
 
     }
 
-    CapsuleBufferGeometry.prototype = Object.create( three__default["default"].BufferGeometry.prototype );
+    CapsuleBufferGeometry.prototype = Object.create( THREE$1.BufferGeometry.prototype );
     CapsuleBufferGeometry.prototype.constructor = CapsuleBufferGeometry;
 
     CapsuleBufferGeometry.fromPoints = function(pointA, pointB, radiusA, radiusB, radialSegments, heightSegments, capsTopSegments, capsBottomSegments, thetaStart, thetaLength ) {
@@ -305,8 +307,8 @@ var THREECapsuleBufferGeometry = (function (three) {
         const r0 = rmin;
         const r1 = rmax;
 
-        const sphereCenterTop = new three__default["default"].Vector3( c0.x, c0.y, c0.z );
-        const sphereCenterBottom = new three__default["default"].Vector3( c1.x, c1.y, c1.z );
+        const sphereCenterTop = new THREE$1.Vector3( c0.x, c0.y, c0.z );
+        const sphereCenterBottom = new THREE$1.Vector3( c1.x, c1.y, c1.z );
 
         const radiusTop = r0;
         const radiusBottom = r1;
@@ -314,7 +316,7 @@ var THREECapsuleBufferGeometry = (function (three) {
 
         // If the big sphere contains the small one, return a SphereBufferGeometry
         if(height < Math.abs( r0 - r1 )){
-            let g = new three__default["default"].SphereBufferGeometry(r1, radialSegments, capsBottomSegments, thetaStart, thetaLength);
+            let g = new THREE$1.SphereBufferGeometry(r1, radialSegments, capsBottomSegments, thetaStart, thetaLength);
 
             g.translate(r1.x, r1.y, r1.z);
             return g;
@@ -325,33 +327,33 @@ var THREECapsuleBufferGeometry = (function (three) {
         const cosAlpha = Math.cos( alpha );
 
         // compute rotation matrix
-        const rotationMatrix = new three__default["default"].Matrix4();
-        const quaternion = new three__default["default"].Quaternion();
-        const capsuleModelUnitVector = new three__default["default"].Vector3( 0, 1, 0 );
-        const capsuleUnitVector = new three__default["default"].Vector3();
+        const rotationMatrix = new THREE$1.Matrix4();
+        const quaternion = new THREE$1.Quaternion();
+        const capsuleModelUnitVector = new THREE$1.Vector3( 0, 1, 0 );
+        const capsuleUnitVector = new THREE$1.Vector3();
         capsuleUnitVector.subVectors( sphereCenterTop, sphereCenterBottom );
         capsuleUnitVector.normalize();
         quaternion.setFromUnitVectors( capsuleModelUnitVector, capsuleUnitVector );
         rotationMatrix.makeRotationFromQuaternion( quaternion );
 
         // compute translation matrix from center point
-        const translationMatrix = new three__default["default"].Matrix4();
-        const cylVec = new three__default["default"].Vector3();
+        const translationMatrix = new THREE$1.Matrix4();
+        const cylVec = new THREE$1.Vector3();
         cylVec.subVectors( sphereCenterTop, sphereCenterBottom );
         cylVec.normalize();
-        let cylTopPoint = new three__default["default"].Vector3();
+        let cylTopPoint = new THREE$1.Vector3();
         cylTopPoint = sphereCenterTop;
         cylTopPoint.addScaledVector( cylVec, cosAlpha * radiusTop );
-        let cylBottomPoint = new three__default["default"].Vector3();
+        let cylBottomPoint = new THREE$1.Vector3();
         cylBottomPoint = sphereCenterBottom;
         cylBottomPoint.addScaledVector( cylVec, cosAlpha * radiusBottom );
 
         // computing lerp for color
-        const dir = new three__default["default"].Vector3();
+        const dir = new THREE$1.Vector3();
         dir.subVectors( cylBottomPoint, cylTopPoint );
         dir.normalize();
 
-        const middlePoint = new three__default["default"].Vector3();
+        const middlePoint = new THREE$1.Vector3();
         middlePoint.lerpVectors( cylBottomPoint, cylTopPoint, 0.5 );
         translationMatrix.makeTranslation( middlePoint.x, middlePoint.y, middlePoint.z );
 
@@ -367,9 +369,11 @@ var THREECapsuleBufferGeometry = (function (three) {
 
     var CapsuleBufferGeometry_1 = CapsuleBufferGeometry;
 
-    THREE.CapsuleBufferGeometry = CapsuleBufferGeometry_1;
+    var THREECapsuleBufferGeometry = CapsuleBufferGeometry_1;
 
-    var exports$1 = CapsuleBufferGeometry_1;
+    THREE.CapsuleBufferGeometry = THREECapsuleBufferGeometry;
+
+    var exports$1 = THREECapsuleBufferGeometry;
 
     return exports$1;
 
