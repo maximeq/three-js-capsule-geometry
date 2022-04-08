@@ -4,8 +4,10 @@
   "description": "A CapsuleBufferGeometry as a new geometry primitive for THREE.JS.",
   "main": "src/exports.js",
   "scripts": {
-    "build": "node build.js",
-    "start": "http-server -c-1 -o /examples/browser/basic.html"
+    "build": "rollup -c",
+    "start": "http-server -c-1 -o /examples/browser/basic.html",
+    "watch": "rollup -c -w",
+    "dev": "npm run build && npm run start"
   },
   "dependencies": {
     "three": "0.122.x"
