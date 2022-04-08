@@ -10,7 +10,7 @@
     "dev": "npm run build && npm run start"
   },
   "dependencies": {
-    "three": "0.122.x"
+    "three": "0.138.x"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.3",
