@@ -1,6 +1,7 @@
 syntax: glob
 
 node_modules/
+dist/*.map
 *.orig
 *npm-debug.log
 *.lock
