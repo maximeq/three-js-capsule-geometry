@@ -1,4 +1,4 @@
-import  CapsuleBufferGeometry  from "./CapsuleBufferGeometry";
+import { CapsuleBufferGeometry } from "./CapsuleBufferGeometry";
 
 export {
     CapsuleBufferGeometry,
