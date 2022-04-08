@@ -132,7 +132,7 @@
 
         folder.add(capsuleControls, 'style', ["Wireframe", "Smooth", "Flat"]).onChange(function () {
             mesh.material.wireframe = capsuleControls.style === "Wireframe";
-            mesh.material.shading = capsuleControls.style === "Smooth" ? THREE.SmoothShading : THREE.FlatShading;
+            mesh.material.flatShading = capsuleControls.style !== "Smooth";
         });
 
         folder.open();
