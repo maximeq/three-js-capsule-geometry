@@ -10,7 +10,7 @@
     "start": "http-server -c-1 -o /examples/browser/basic.html"
   },
   "dependencies": {
-    "three-full": "16.0.1"
+    "three": "0.122.x"
   },
   "devDependencies": {
     "http-server": "^0.12.3",

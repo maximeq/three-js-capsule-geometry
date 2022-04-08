@@ -1,4 +1,4 @@
-const THREE = require("three-full/builds/Three.cjs.js");
+const THREE = require("three");
 
 /**
  * @author maximequiblier
@@ -60,9 +60,9 @@ function CapsuleBufferGeometry( radiusTop, radiusBottom, height, radialSegments,
     // build geometry
 
     this.setIndex( indices );
-    this.addAttribute( 'position', vertices );
-    this.addAttribute( 'normal', normals );
-    this.addAttribute( 'uv', uvs );
+    this.setAttribute( 'position', vertices );
+    this.setAttribute( 'normal', normals );
+    this.setAttribute( 'uv', uvs );
 
     // helper functions
 
@@ -315,7 +315,8 @@ CapsuleBufferGeometry.fromPoints = function(pointA, pointB, radiusA, radiusB, ra
 
     // If the big sphere contains the small one, return a SphereBufferGeometry
     if(height < Math.abs( r0 - r1 )){
-        let g = new THREE.SphereBufferGeometry(r1, radialSegments, capsBottomSegments, thetaStart, thetaLength);
+        let g = new THREE.SphereBufferGeometry(r1, radialSegments, capsBottomSegments, thetaStart, thetaLength);
+
         g.translate(r1.x, r1.y, r1.z);
         return g;
     }

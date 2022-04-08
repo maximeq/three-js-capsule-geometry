@@ -32,14 +32,14 @@ async function build(inputOptions, outputOptions) {
 
 build({
     input: 'src/exports.js',
-    plugins:  [ commonjs(), resolve() ],
-    external: [ 'three-full/builds/Three.cjs.js' ],
+    plugins: [commonjs(), resolve()],
+    external: ['three'],
 }, {
     format: 'umd',
     name: 'THREECapsuleBufferGeometry',
     file: './dist/browser/three-js-capsule-geometry.js',
     globals: {
-        'three-full/builds/Three.cjs.js' : 'THREE'
+        'three': 'THREE'
     }
 });
 
@@ -50,24 +50,24 @@ build({
 
 build({
     input: 'src/exports.js',
-    plugins:  [
+    plugins: [
         commonjs(),
         resolve(),
         terser(),
         prettier({
-          parser: 'babel',
-          tabWidth: 0,
-          singleQuote: false,
-          bracketSpacing:false
+            parser: 'babel',
+            tabWidth: 0,
+            singleQuote: false,
+            bracketSpacing: false
         })
     ],
-    external: [ 'three-full/builds/Three.cjs.js' ],
+    external: ['three'],
 }, {
     format: 'umd',
     name: 'THREECapsuleBufferGeometry',
     file: './dist/browser/three-js-capsule-geometry.min.js',
     globals: {
-        'three-full/builds/Three.cjs.js' : 'THREE'
+        'three': 'THREE'
     }
 });
 

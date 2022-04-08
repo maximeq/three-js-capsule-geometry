@@ -1,293 +1,377 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('three-full/builds/Three.cjs.js')) :
-	typeof define === 'function' && define.amd ? define(['three-full/builds/Three.cjs.js'], factory) :
-	(global.THREECapsuleBufferGeometry = factory(global.THREE));
-}(this, (function (Three_cjs) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('three')) :
+    typeof define === 'function' && define.amd ? define(['three'], factory) :
+    (global.THREECapsuleBufferGeometry = factory(global.THREE));
+}(this, (function (three) { 'use strict';
 
-	Three_cjs = Three_cjs && Three_cjs.hasOwnProperty('default') ? Three_cjs['default'] : Three_cjs;
+    three = three && three.hasOwnProperty('default') ? three['default'] : three;
 
-	/**
-	 * @author maximequiblier
-	 */
-	function CapsuleBufferGeometry( radiusTop, radiusBottom, height, radialSegments, heightSegments, capsTopSegments, capsBottomSegments, thetaStart, thetaLength ) {
+    /**
+     * @author maximequiblier
+     */
+    function CapsuleBufferGeometry( radiusTop, radiusBottom, height, radialSegments, heightSegments, capsTopSegments, capsBottomSegments, thetaStart, thetaLength ) {
 
-		Three_cjs.BufferGeometry.call( this );
+        three.BufferGeometry.call( this );
 
-		this.type = 'CapsuleBufferGeometry';
+        this.type = 'CapsuleBufferGeometry';
 
-		this.parameters = {
-			radiusTop: radiusTop,
-			radiusBottom: radiusBottom,
-			height: height,
-			radialSegments: radialSegments,
-			heightSegments: heightSegments,
-			thetaStart: thetaStart,
-			thetaLength: thetaLength
-		};
+        this.parameters = {
+            radiusTop: radiusTop,
+            radiusBottom: radiusBottom,
+            height: height,
+            radialSegments: radialSegments,
+            heightSegments: heightSegments,
+            thetaStart: thetaStart,
+            thetaLength: thetaLength
+        };
 
-		radiusTop = radiusTop !== undefined ? radiusTop : 1;
-		radiusBottom = radiusBottom !== undefined ? radiusBottom : 1;
-		height = height !== undefined ? height : 2;
+        radiusTop = radiusTop !== undefined ? radiusTop : 1;
+        radiusBottom = radiusBottom !== undefined ? radiusBottom : 1;
+        height = height !== undefined ? height : 2;
 
-		radialSegments = Math.floor( radialSegments ) || 8;
-		heightSegments = Math.floor( heightSegments ) || 1;
-	    capsTopSegments = Math.floor( capsTopSegments ) || 2;
-	    capsBottomSegments = Math.floor( capsBottomSegments ) || 2;
+        radialSegments = Math.floor( radialSegments ) || 8;
+        heightSegments = Math.floor( heightSegments ) || 1;
+        capsTopSegments = Math.floor( capsTopSegments ) || 2;
+        capsBottomSegments = Math.floor( capsBottomSegments ) || 2;
 
-		thetaStart = thetaStart !== undefined ? thetaStart : 0.0;
-		thetaLength = thetaLength !== undefined ? thetaLength : 2.0 * Math.PI;
+        thetaStart = thetaStart !== undefined ? thetaStart : 0.0;
+        thetaLength = thetaLength !== undefined ? thetaLength : 2.0 * Math.PI;
 
-	    // Alpha is the angle such that Math.PI/2 - alpha is the cone part angle.
-	    var alpha = Math.acos((radiusBottom-radiusTop)/height);
+        // Alpha is the angle such that Math.PI/2 - alpha is the cone part angle.
+        var alpha = Math.acos((radiusBottom-radiusTop)/height);
 
-		var vertexCount = calculateVertexCount();
-		var indexCount = calculateIndexCount();
+        var vertexCount = calculateVertexCount();
+        var indexCount = calculateIndexCount();
 
-		// buffers
-		var indices = new Three_cjs.BufferAttribute( new ( indexCount > 65535 ? Uint32Array : Uint16Array )( indexCount ), 1 );
-		var vertices = new Three_cjs.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
-		var normals = new Three_cjs.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
-		var uvs = new Three_cjs.BufferAttribute( new Float32Array( vertexCount * 2 ), 2 );
+        // buffers
+        var indices = new three.BufferAttribute( new ( indexCount > 65535 ? Uint32Array : Uint16Array )( indexCount ), 1 );
+        var vertices = new three.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
+        var normals = new three.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
+        var uvs = new three.BufferAttribute( new Float32Array( vertexCount * 2 ), 2 );
 
-		// helper variables
+        // helper variables
 
-		var index = 0,
-		    indexOffset = 0,
-		    indexArray = [],
-		    halfHeight = height / 2;
+        var index = 0,
+            indexOffset = 0,
+            indexArray = [],
+            halfHeight = height / 2;
 
-		// generate geometry
+        // generate geometry
 
-		generateTorso();
+        generateTorso();
 
-		// build geometry
+        // build geometry
 
-		this.setIndex( indices );
-		this.addAttribute( 'position', vertices );
-		this.addAttribute( 'normal', normals );
-		this.addAttribute( 'uv', uvs );
+        this.setIndex( indices );
+        this.setAttribute( 'position', vertices );
+        this.setAttribute( 'normal', normals );
+        this.setAttribute( 'uv', uvs );
 
-		// helper functions
+        // helper functions
 
-	    function calculateVertexCount(){
-	        var count = ( radialSegments + 1 ) * ( heightSegments + 1 + capsBottomSegments + capsTopSegments);
-	        return count;
-	    }
+        function calculateVertexCount(){
+            var count = ( radialSegments + 1 ) * ( heightSegments + 1 + capsBottomSegments + capsTopSegments);
+            return count;
+        }
 
-		function calculateIndexCount() {
-			var count = radialSegments * (heightSegments + capsBottomSegments + capsTopSegments) * 2 * 3;
-			return count;
-		}
+        function calculateIndexCount() {
+            var count = radialSegments * (heightSegments + capsBottomSegments + capsTopSegments) * 2 * 3;
+            return count;
+        }
 
-		function generateTorso() {
+        function generateTorso() {
 
-			var x, y;
-			var normal = new Three_cjs.Vector3();
-			var vertex = new Three_cjs.Vector3();
+            var x, y;
+            var normal = new three.Vector3();
+            var vertex = new three.Vector3();
 
-	        var cosAlpha = Math.cos(alpha);
-	        var sinAlpha = Math.sin(alpha);
+            var cosAlpha = Math.cos(alpha);
+            var sinAlpha = Math.sin(alpha);
 
-	        var cone_length =
-	            new Three_cjs.Vector2(
-	                radiusTop*sinAlpha,
-	                halfHeight+radiusTop*cosAlpha
-	                ).sub(new Three_cjs.Vector2(
-	                    radiusBottom*sinAlpha,
-	                    -halfHeight+radiusBottom*cosAlpha
-	                )
-	            ).length();
+            var cone_length =
+                new three.Vector2(
+                    radiusTop*sinAlpha,
+                    halfHeight+radiusTop*cosAlpha
+                    ).sub(new three.Vector2(
+                        radiusBottom*sinAlpha,
+                        -halfHeight+radiusBottom*cosAlpha
+                    )
+                ).length();
 
-	        // Total length for v texture coord
-	        var vl = radiusTop*alpha
-	                 + cone_length
-	                 + radiusBottom*(Math.PI/2-alpha);
+            // Total length for v texture coord
+            var vl = radiusTop*alpha
+                     + cone_length
+                     + radiusBottom*(Math.PI/2-alpha);
 
-			// generate vertices, normals and uvs
+            // generate vertices, normals and uvs
 
-	        var v = 0;
-	        for( y = 0; y <= capsTopSegments; y++ ) {
+            var v = 0;
+            for( y = 0; y <= capsTopSegments; y++ ) {
 
-	            var indexRow = [];
+                var indexRow = [];
 
-	            var a = Math.PI/2 - alpha*(y / capsTopSegments);
+                var a = Math.PI/2 - alpha*(y / capsTopSegments);
 
-	            v += radiusTop*alpha/capsTopSegments;
+                v += radiusTop*alpha/capsTopSegments;
 
-	            var cosA = Math.cos(a);
-	            var sinA = Math.sin(a);
+                var cosA = Math.cos(a);
+                var sinA = Math.sin(a);
 
-	            // calculate the radius of the current row
-				var radius = cosA*radiusTop;
+                // calculate the radius of the current row
+                var radius = cosA*radiusTop;
 
-	            for ( x = 0; x <= radialSegments; x ++ ) {
+                for ( x = 0; x <= radialSegments; x ++ ) {
 
-					var u = x / radialSegments;
+                    var u = x / radialSegments;
 
-					var theta = u * thetaLength + thetaStart;
+                    var theta = u * thetaLength + thetaStart;
 
-					var sinTheta = Math.sin( theta );
-					var cosTheta = Math.cos( theta );
+                    var sinTheta = Math.sin( theta );
+                    var cosTheta = Math.cos( theta );
 
-					// vertex
-					vertex.x = radius * sinTheta;
-					vertex.y = halfHeight + sinA*radiusTop;
-					vertex.z = radius * cosTheta;
-					vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
+                    // vertex
+                    vertex.x = radius * sinTheta;
+                    vertex.y = halfHeight + sinA*radiusTop;
+                    vertex.z = radius * cosTheta;
+                    vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
 
-					// normal
-					normal.set( cosA*sinTheta, sinA, cosA*cosTheta );
-					normals.setXYZ( index, normal.x, normal.y, normal.z );
+                    // normal
+                    normal.set( cosA*sinTheta, sinA, cosA*cosTheta );
+                    normals.setXYZ( index, normal.x, normal.y, normal.z );
 
-					// uv
-					uvs.setXY( index, u, 1 - v/vl );
+                    // uv
+                    uvs.setXY( index, u, 1 - v/vl );
 
-					// save index of vertex in respective row
-					indexRow.push( index );
+                    // save index of vertex in respective row
+                    indexRow.push( index );
 
-					// increase index
-					index ++;
+                    // increase index
+                    index ++;
 
-				}
+                }
 
-	            // now save vertices of the row in our index array
-				indexArray.push( indexRow );
+                // now save vertices of the row in our index array
+                indexArray.push( indexRow );
 
-	        }
+            }
 
-	        var cone_height = height + cosAlpha*radiusTop - cosAlpha*radiusBottom;
-	        var slope = sinAlpha * ( radiusBottom - radiusTop ) / cone_height;
-			for ( y = 1; y <= heightSegments; y++ ) {
+            var cone_height = height + cosAlpha*radiusTop - cosAlpha*radiusBottom;
+            var slope = sinAlpha * ( radiusBottom - radiusTop ) / cone_height;
+            for ( y = 1; y <= heightSegments; y++ ) {
 
-				var indexRow = [];
+                var indexRow = [];
 
-				v += cone_length/heightSegments;
+                v += cone_length/heightSegments;
 
-				// calculate the radius of the current row
-				var radius = sinAlpha * ( y * ( radiusBottom - radiusTop ) / heightSegments + radiusTop);
+                // calculate the radius of the current row
+                var radius = sinAlpha * ( y * ( radiusBottom - radiusTop ) / heightSegments + radiusTop);
 
-				for ( x = 0; x <= radialSegments; x ++ ) {
+                for ( x = 0; x <= radialSegments; x ++ ) {
 
-					var u = x / radialSegments;
+                    var u = x / radialSegments;
 
-					var theta = u * thetaLength + thetaStart;
+                    var theta = u * thetaLength + thetaStart;
 
-					var sinTheta = Math.sin( theta );
-					var cosTheta = Math.cos( theta );
+                    var sinTheta = Math.sin( theta );
+                    var cosTheta = Math.cos( theta );
 
-					// vertex
-					vertex.x = radius * sinTheta;
-					vertex.y = halfHeight + cosAlpha*radiusTop - y * cone_height / heightSegments;
-					vertex.z = radius * cosTheta;
-					vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
+                    // vertex
+                    vertex.x = radius * sinTheta;
+                    vertex.y = halfHeight + cosAlpha*radiusTop - y * cone_height / heightSegments;
+                    vertex.z = radius * cosTheta;
+                    vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
 
-					// normal
-					normal.set( sinTheta, slope, cosTheta ).normalize();
-					normals.setXYZ( index, normal.x, normal.y, normal.z );
+                    // normal
+                    normal.set( sinTheta, slope, cosTheta ).normalize();
+                    normals.setXYZ( index, normal.x, normal.y, normal.z );
 
-					// uv
-					uvs.setXY( index, u, 1 - v/vl );
+                    // uv
+                    uvs.setXY( index, u, 1 - v/vl );
 
-					// save index of vertex in respective row
-					indexRow.push( index );
+                    // save index of vertex in respective row
+                    indexRow.push( index );
 
-					// increase index
-					index ++;
+                    // increase index
+                    index ++;
 
-				}
+                }
 
-				// now save vertices of the row in our index array
-				indexArray.push( indexRow );
+                // now save vertices of the row in our index array
+                indexArray.push( indexRow );
 
-			}
+            }
 
-	        for( y = 1; y <= capsBottomSegments; y++ ) {
+            for( y = 1; y <= capsBottomSegments; y++ ) {
 
-	            var indexRow = [];
+                var indexRow = [];
 
-	            var a = (Math.PI/2 - alpha) - (Math.PI - alpha)*( y / capsBottomSegments);
+                var a = (Math.PI/2 - alpha) - (Math.PI - alpha)*( y / capsBottomSegments);
 
-	            v += radiusBottom*alpha/capsBottomSegments;
+                v += radiusBottom*alpha/capsBottomSegments;
 
-	            var cosA = Math.cos(a);
-	            var sinA = Math.sin(a);
+                var cosA = Math.cos(a);
+                var sinA = Math.sin(a);
 
-	            // calculate the radius of the current row
-				var radius = cosA*radiusBottom;
+                // calculate the radius of the current row
+                var radius = cosA*radiusBottom;
 
-	            for ( x = 0; x <= radialSegments; x ++ ) {
+                for ( x = 0; x <= radialSegments; x ++ ) {
 
-					var u = x / radialSegments;
+                    var u = x / radialSegments;
 
-					var theta = u * thetaLength + thetaStart;
+                    var theta = u * thetaLength + thetaStart;
 
-					var sinTheta = Math.sin( theta );
-					var cosTheta = Math.cos( theta );
+                    var sinTheta = Math.sin( theta );
+                    var cosTheta = Math.cos( theta );
 
-					// vertex
-					vertex.x = radius * sinTheta;
-					vertex.y = -halfHeight + sinA*radiusBottom;				vertex.z = radius * cosTheta;
-					vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
+                    // vertex
+                    vertex.x = radius * sinTheta;
+                    vertex.y = -halfHeight + sinA*radiusBottom;                vertex.z = radius * cosTheta;
+                    vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
 
-					// normal
-					normal.set( cosA*sinTheta, sinA, cosA*cosTheta );
-					normals.setXYZ( index, normal.x, normal.y, normal.z );
+                    // normal
+                    normal.set( cosA*sinTheta, sinA, cosA*cosTheta );
+                    normals.setXYZ( index, normal.x, normal.y, normal.z );
 
-					// uv
-					uvs.setXY( index, u, 1 - v/vl );
+                    // uv
+                    uvs.setXY( index, u, 1 - v/vl );
 
-					// save index of vertex in respective row
-					indexRow.push( index );
+                    // save index of vertex in respective row
+                    indexRow.push( index );
 
-					// increase index
-					index ++;
+                    // increase index
+                    index ++;
 
-				}
+                }
 
-	            // now save vertices of the row in our index array
-				indexArray.push( indexRow );
+                // now save vertices of the row in our index array
+                indexArray.push( indexRow );
 
-	        }
+            }
 
-			// generate indices
+            // generate indices
 
-			for ( x = 0; x < radialSegments; x ++ ) {
+            for ( x = 0; x < radialSegments; x ++ ) {
 
-				for ( y = 0; y < capsTopSegments + heightSegments + capsBottomSegments; y ++ ) {
+                for ( y = 0; y < capsTopSegments + heightSegments + capsBottomSegments; y ++ ) {
 
-					// we use the index array to access the correct indices
-					var i1 = indexArray[ y ][ x ];
-					var i2 = indexArray[ y + 1 ][ x ];
-					var i3 = indexArray[ y + 1 ][ x + 1 ];
-					var i4 = indexArray[ y ][ x + 1 ];
+                    // we use the index array to access the correct indices
+                    var i1 = indexArray[ y ][ x ];
+                    var i2 = indexArray[ y + 1 ][ x ];
+                    var i3 = indexArray[ y + 1 ][ x + 1 ];
+                    var i4 = indexArray[ y ][ x + 1 ];
 
-					// face one
-					indices.setX( indexOffset, i1 ); indexOffset ++;
-					indices.setX( indexOffset, i2 ); indexOffset ++;
-					indices.setX( indexOffset, i4 ); indexOffset ++;
+                    // face one
+                    indices.setX( indexOffset, i1 ); indexOffset ++;
+                    indices.setX( indexOffset, i2 ); indexOffset ++;
+                    indices.setX( indexOffset, i4 ); indexOffset ++;
 
-					// face two
-					indices.setX( indexOffset, i2 ); indexOffset ++;
-					indices.setX( indexOffset, i3 ); indexOffset ++;
-					indices.setX( indexOffset, i4 ); indexOffset ++;
+                    // face two
+                    indices.setX( indexOffset, i2 ); indexOffset ++;
+                    indices.setX( indexOffset, i3 ); indexOffset ++;
+                    indices.setX( indexOffset, i4 ); indexOffset ++;
 
-				}
+                }
 
-			}
+            }
 
-		}
+        }
 
-	}
+    }
 
-	CapsuleBufferGeometry.prototype = Object.create( Three_cjs.BufferGeometry.prototype );
-	CapsuleBufferGeometry.prototype.constructor = CapsuleBufferGeometry;
+    CapsuleBufferGeometry.prototype = Object.create( three.BufferGeometry.prototype );
+    CapsuleBufferGeometry.prototype.constructor = CapsuleBufferGeometry;
 
-	var CapsuleBufferGeometry_1 = CapsuleBufferGeometry;
+    CapsuleBufferGeometry.fromPoints = function(pointA, pointB, radiusA, radiusB, radialSegments, heightSegments, capsTopSegments, capsBottomSegments, thetaStart, thetaLength ) {
 
-	Three_cjs.CapsuleBufferGeometry = CapsuleBufferGeometry_1;
+        let cmin = null;
+        let cmax = null;
+        let rmin = null;
+        let rmax = null;
 
-	var exports$1 = CapsuleBufferGeometry_1;
+        if(radiusA > radiusB){
+            cmax = pointA;
+            cmin = pointB;
+            rmax = radiusA;
+            rmin = radiusB;
+        }else{
+            cmax = pointA;
+            cmin = pointB;
+            rmax = radiusA;
+            rmin = radiusB;
+        }
 
-	return exports$1;
+        const c0 = cmin;
+        const c1 = cmax;
+        const r0 = rmin;
+        const r1 = rmax;
+
+        const sphereCenterTop = new three.Vector3( c0.x, c0.y, c0.z );
+        const sphereCenterBottom = new three.Vector3( c1.x, c1.y, c1.z );
+
+        const radiusTop = r0;
+        const radiusBottom = r1;
+        let height = sphereCenterTop.distanceTo( sphereCenterBottom );
+
+        // If the big sphere contains the small one, return a SphereBufferGeometry
+        if(height < Math.abs( r0 - r1 )){
+            let g = new three.SphereBufferGeometry(r1, radialSegments, capsBottomSegments, thetaStart, thetaLength);
+
+            g.translate(r1.x, r1.y, r1.z);
+            return g;
+        }
+
+        // useful values
+        const alpha = Math.acos( ( radiusBottom - radiusTop ) / height );
+        const cosAlpha = Math.cos( alpha );
+
+        // compute rotation matrix
+        const rotationMatrix = new three.Matrix4();
+        const quaternion = new three.Quaternion();
+        const capsuleModelUnitVector = new three.Vector3( 0, 1, 0 );
+        const capsuleUnitVector = new three.Vector3();
+        capsuleUnitVector.subVectors( sphereCenterTop, sphereCenterBottom );
+        capsuleUnitVector.normalize();
+        quaternion.setFromUnitVectors( capsuleModelUnitVector, capsuleUnitVector );
+        rotationMatrix.makeRotationFromQuaternion( quaternion );
+
+        // compute translation matrix from center point
+        const translationMatrix = new three.Matrix4();
+        const cylVec = new three.Vector3();
+        cylVec.subVectors( sphereCenterTop, sphereCenterBottom );
+        cylVec.normalize();
+        let cylTopPoint = new three.Vector3();
+        cylTopPoint = sphereCenterTop;
+        cylTopPoint.addScaledVector( cylVec, cosAlpha * radiusTop );
+        let cylBottomPoint = new three.Vector3();
+        cylBottomPoint = sphereCenterBottom;
+        cylBottomPoint.addScaledVector( cylVec, cosAlpha * radiusBottom );
+
+        // computing lerp for color
+        const dir = new three.Vector3();
+        dir.subVectors( cylBottomPoint, cylTopPoint );
+        dir.normalize();
+
+        const middlePoint = new three.Vector3();
+        middlePoint.lerpVectors( cylBottomPoint, cylTopPoint, 0.5 );
+        translationMatrix.makeTranslation( middlePoint.x, middlePoint.y, middlePoint.z );
+
+        // Instanciate a CylinderBufferGeometry from three.js
+        let g = new CapsuleBufferGeometry(radiusBottom, radiusTop, height, radialSegments, heightSegments, capsTopSegments, capsBottomSegments, thetaStart, thetaLength);
+
+        // applying transformations
+        g.applyMatrix( rotationMatrix );
+        g.applyMatrix( translationMatrix );
+
+        return g;
+    };
+
+    var CapsuleBufferGeometry_1 = CapsuleBufferGeometry;
+
+    THREE.CapsuleBufferGeometry = CapsuleBufferGeometry_1;
+
+    var exports$1 = CapsuleBufferGeometry_1;
+
+    return exports$1;
 
 })));
