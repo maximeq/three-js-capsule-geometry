@@ -363,14 +363,20 @@ var THREECapsuleBufferGeometry = (function (exports, three) {
 
     function checkLib(libName, lib) {
 
-        if (THREE[libName] === undefined) {
-            THREE[libName] = lib;
-            return;
-        }
+        try {
 
-        if (THREE[libName] !== lib) {
-            let message = `CapsuleBufferGeometry: ${libName} is duplicated. Your bundle includes ${libName} twice. Please repair your bundle.`;
-            throw message;
+            if (THREE[libName] === undefined) {
+                THREE[libName] = lib;
+                return;
+            }
+
+            if (THREE[libName] !== lib) {
+                let message = `CapsuleBufferGeometry: ${libName} is duplicated. Your bundle includes ${libName} twice. Please repair your bundle.`;
+                throw message;
+            }
+        }
+        catch {
+            console.warn(`CapsuleBufferGeometry: THREE is not defined. Duplication check unavailable.`);
         }
     }
 

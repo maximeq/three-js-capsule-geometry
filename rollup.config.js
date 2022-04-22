@@ -35,6 +35,11 @@ export default {
             file: `${DIST}/${MODULE_FILENAME}.mjs`,
         },
 
+        {   // for node
+            format: 'cjs',
+            file: `${DIST}/${MODULE_FILENAME}.cjs`,
+        },
+
         {   // for browser (debug)
             format: 'iife',
             name: MODULE_NAME,
