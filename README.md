@@ -23,13 +23,25 @@ npm install
 ````
 This should install all required dependencies for build and development.
 
+### Build ###
+
+Build:
+````
+npm run build
+````
+Will update the browser/node/esm builds in `dist/`.
+
 ### Usage ###
 
-You can use this library directly in browser or from node.js.
+You can use this library :
+* directly in browser
+* from node.js
+* with your bundler
 
+Distribution files can be found in `dist/`.
 #### Browser ####
 
-Distribution files can be found in ./dist/browser, to be included in your HTML :
+Include `dist/three-js-capsule-geometry.js` in your HTML :
 
 ````
 <!DOCTYPE html>
@@ -41,7 +53,7 @@ Distribution files can be found in ./dist/browser, to be included in your HTML :
     <body>
         <!-- Don't forget to include THREE, its is not shipped with the lib -->
         <script src="three.js"></script>
-        <script src="dist/browser/three-js-capsule-geometry.js"></script>
+        <script src="dist/three-js-capsule-geometry.js"></script>
         <script>
             alert('Checking definition of CapsuleBufferGeometry : ' + THREE.CapsuleBufferGeometry !== undefined)
         </script>
@@ -49,29 +61,40 @@ Distribution files can be found in ./dist/browser, to be included in your HTML :
 </html>
 ````
 
+This is an IIFE bundle.
+
 #### Node ####
 
-In the repository folder:
+In a node shell or cjs file:
+```
+require("three-js-capsule-geometry")
+```
+
+Or if you want to perform duplication detection (see below):
+```
+THREE = require("three")
+require("three-js-capsule-geometry")
+```
+
+This will require the CJS bunlde.
+
+#### Bundlers ####
 
 ```
-npm start
+import {CapsuleBufferGeometry} from "three-js-capsule-geometry"
 ```
 
-This should open a browser window with a test application on a local server.
+This will import the ESM entry point, for you to bundle directly from sources.
 
-### Repository Commands ###
+Duplication detection is available when THREE.js is set as external.
 
-Build:
-````
-npm run build
-````
-Will update the browser build in dist.
+To avoid dependancy duplication, make sure you use the "dedupe" option of your bundler for THREE and CapsuleBufferGeometry.
+
+### Duplication detection
+
+This package performs duplication detection (useful for bundlers) by checking against the`THREE` global and assigning its exports to it. It `THREE` is not defined, no detection will occur. 
 
 ### Dependencies ###
 
-#### Node Dependencies ####
-This library currently depends on node module three-full which is packaging all THREE.JS sources, including extras like examples.
-It can work with only THREE, but for convenience we rely on three-full.
+This library currently depends on THREE.js.
 
-#### Browser Dependencies ####
-In browser, only THREE is required.
