@@ -88,6 +88,8 @@ This will import the ESM entry point, for you to bundle directly from sources.
 
 Duplication detection is available when THREE.js is set as external.
 
+To avoid dependancy duplication, make sure you use the "dedupe" option of your bundler for THREE and CapsuleBufferGeometry.
+
 ### Duplication detection
 
 This package performs duplication detection (useful for bundlers) by checking against the`THREE` global and assigning itself to it. It `THREE` is not defined, no detection will occur. 
