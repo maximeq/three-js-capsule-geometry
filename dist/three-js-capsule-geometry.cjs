@@ -1,11 +1,15 @@
-import { BufferGeometry, Vector3, SphereBufferGeometry, Matrix4, Quaternion, BufferAttribute, Vector2 } from 'three';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var three = require('three');
 
 /**
  * @author maximequiblier
  */
 function CapsuleBufferGeometry(radiusTop, radiusBottom, height, radialSegments, heightSegments, capsTopSegments, capsBottomSegments, thetaStart, thetaLength) {
 
-    BufferGeometry.call(this);
+    three.BufferGeometry.call(this);
 
     this.type = 'CapsuleBufferGeometry';
 
@@ -38,10 +42,10 @@ function CapsuleBufferGeometry(radiusTop, radiusBottom, height, radialSegments, 
     var indexCount = calculateIndexCount();
 
     // buffers
-    var indices = new BufferAttribute(new (indexCount > 65535 ? Uint32Array : Uint16Array)(indexCount), 1);
-    var vertices = new BufferAttribute(new Float32Array(vertexCount * 3), 3);
-    var normals = new BufferAttribute(new Float32Array(vertexCount * 3), 3);
-    var uvs = new BufferAttribute(new Float32Array(vertexCount * 2), 2);
+    var indices = new three.BufferAttribute(new (indexCount > 65535 ? Uint32Array : Uint16Array)(indexCount), 1);
+    var vertices = new three.BufferAttribute(new Float32Array(vertexCount * 3), 3);
+    var normals = new three.BufferAttribute(new Float32Array(vertexCount * 3), 3);
+    var uvs = new three.BufferAttribute(new Float32Array(vertexCount * 2), 2);
 
     // helper variables
 
@@ -76,17 +80,17 @@ function CapsuleBufferGeometry(radiusTop, radiusBottom, height, radialSegments, 
     function generateTorso() {
 
         var x, y;
-        var normal = new Vector3();
-        var vertex = new Vector3();
+        var normal = new three.Vector3();
+        var vertex = new three.Vector3();
 
         var cosAlpha = Math.cos(alpha);
         var sinAlpha = Math.sin(alpha);
 
         var cone_length =
-            new Vector2(
+            new three.Vector2(
                 radiusTop * sinAlpha,
                 halfHeight + radiusTop * cosAlpha
-            ).sub(new Vector2(
+            ).sub(new three.Vector2(
                 radiusBottom * sinAlpha,
                 -halfHeight + radiusBottom * cosAlpha
             )
@@ -273,7 +277,7 @@ function CapsuleBufferGeometry(radiusTop, radiusBottom, height, radialSegments, 
 
 }
 
-CapsuleBufferGeometry.prototype = Object.create(BufferGeometry.prototype);
+CapsuleBufferGeometry.prototype = Object.create(three.BufferGeometry.prototype);
 CapsuleBufferGeometry.prototype.constructor = CapsuleBufferGeometry;
 
 CapsuleBufferGeometry.fromPoints = function (pointA, pointB, radiusA, radiusB, radialSegments, heightSegments, capsTopSegments, capsBottomSegments, thetaStart, thetaLength) {
@@ -300,8 +304,8 @@ CapsuleBufferGeometry.fromPoints = function (pointA, pointB, radiusA, radiusB, r
     const r0 = rmin;
     const r1 = rmax;
 
-    const sphereCenterTop = new Vector3(c0.x, c0.y, c0.z);
-    const sphereCenterBottom = new Vector3(c1.x, c1.y, c1.z);
+    const sphereCenterTop = new three.Vector3(c0.x, c0.y, c0.z);
+    const sphereCenterBottom = new three.Vector3(c1.x, c1.y, c1.z);
 
     const radiusTop = r0;
     const radiusBottom = r1;
@@ -309,7 +313,7 @@ CapsuleBufferGeometry.fromPoints = function (pointA, pointB, radiusA, radiusB, r
 
     // If the big sphere contains the small one, return a SphereBufferGeometry
     if (height < Math.abs(r0 - r1)) {
-        let g = new SphereBufferGeometry(r1, radialSegments, capsBottomSegments, thetaStart, thetaLength);
+        let g = new three.SphereBufferGeometry(r1, radialSegments, capsBottomSegments, thetaStart, thetaLength);
 
         g.translate(r1.x, r1.y, r1.z);
         return g;
@@ -320,33 +324,33 @@ CapsuleBufferGeometry.fromPoints = function (pointA, pointB, radiusA, radiusB, r
     const cosAlpha = Math.cos(alpha);
 
     // compute rotation matrix
-    const rotationMatrix = new Matrix4();
-    const quaternion = new Quaternion();
-    const capsuleModelUnitVector = new Vector3(0, 1, 0);
-    const capsuleUnitVector = new Vector3();
+    const rotationMatrix = new three.Matrix4();
+    const quaternion = new three.Quaternion();
+    const capsuleModelUnitVector = new three.Vector3(0, 1, 0);
+    const capsuleUnitVector = new three.Vector3();
     capsuleUnitVector.subVectors(sphereCenterTop, sphereCenterBottom);
     capsuleUnitVector.normalize();
     quaternion.setFromUnitVectors(capsuleModelUnitVector, capsuleUnitVector);
     rotationMatrix.makeRotationFromQuaternion(quaternion);
 
     // compute translation matrix from center point
-    const translationMatrix = new Matrix4();
-    const cylVec = new Vector3();
+    const translationMatrix = new three.Matrix4();
+    const cylVec = new three.Vector3();
     cylVec.subVectors(sphereCenterTop, sphereCenterBottom);
     cylVec.normalize();
-    let cylTopPoint = new Vector3();
+    let cylTopPoint = new three.Vector3();
     cylTopPoint = sphereCenterTop;
     cylTopPoint.addScaledVector(cylVec, cosAlpha * radiusTop);
-    let cylBottomPoint = new Vector3();
+    let cylBottomPoint = new three.Vector3();
     cylBottomPoint = sphereCenterBottom;
     cylBottomPoint.addScaledVector(cylVec, cosAlpha * radiusBottom);
 
     // computing lerp for color
-    const dir = new Vector3();
+    const dir = new three.Vector3();
     dir.subVectors(cylBottomPoint, cylTopPoint);
     dir.normalize();
 
-    const middlePoint = new Vector3();
+    const middlePoint = new three.Vector3();
     middlePoint.lerpVectors(cylBottomPoint, cylTopPoint, 0.5);
     translationMatrix.makeTranslation(middlePoint.x, middlePoint.y, middlePoint.z);
 
@@ -381,4 +385,4 @@ function checkLib(libName, lib) {
 
 checkLib("CapsuleBufferGeometry", CapsuleBufferGeometry);
 
-export { CapsuleBufferGeometry };
+exports.CapsuleBufferGeometry = CapsuleBufferGeometry;
