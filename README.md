@@ -53,7 +53,7 @@ Include `dist/three-js-capsule-geometry.js` in your HTML :
     <body>
         <!-- Don't forget to include THREE, its is not shipped with the lib -->
         <script src="three.js"></script>
-        <script src="dist/browser/three-js-capsule-geometry.js"></script>
+        <script src="dist/three-js-capsule-geometry.js"></script>
         <script>
             alert('Checking definition of CapsuleBufferGeometry : ' + THREE.CapsuleBufferGeometry !== undefined)
         </script>
@@ -92,7 +92,7 @@ To avoid dependancy duplication, make sure you use the "dedupe" option of your b
 
 ### Duplication detection
 
-This package performs duplication detection (useful for bundlers) by checking against the`THREE` global and assigning itself to it. It `THREE` is not defined, no detection will occur. 
+This package performs duplication detection (useful for bundlers) by checking against the`THREE` global and assigning its exports to it. It `THREE` is not defined, no detection will occur. 
 
 ### Dependencies ###
 
