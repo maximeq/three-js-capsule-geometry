@@ -6,9 +6,9 @@
   "module": "src/check-wrapper.js",
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
-    "start": "http-server -c-1 -o /examples/browser/basic.html",
-    "watch": "rollup -c -w",
+    "build": "npx rollup -c",
+    "start": "npx http-server -c-1 -o /examples/browser/basic.html",
+    "watch": "npx rollup -c -w",
     "dev": "npm run build && npm run start"
   },
   "dependencies": {
@@ -17,7 +17,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.3",
     "@rollup/plugin-node-resolve": "^13.1.3",
-    "http-server": "^0.12.3",
+    "http-server": "^14.1.0",
     "jsdoc-api": "^4.0.3",
     "rollup": "^2.70.1",
     "rollup-plugin-terser": "^7.0.2"
